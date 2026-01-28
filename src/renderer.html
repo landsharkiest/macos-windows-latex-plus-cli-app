@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LaTeX Plus</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>LaTeX Plus</h1>
+      <p>Cross-platform LaTeX editor with AI integration</p>
+    </header>
+
+    <div class="toolbar">
+      <button id="openBtn" class="btn">Open File</button>
+      <button id="saveBtn" class="btn">Save File</button>
+      <button id="compileBtn" class="btn btn-primary">Compile to PDF</button>
+      <button id="aiBtn" class="btn btn-ai" disabled>AI Generate</button>
+    </div>
+
+    <div class="main-content">
+      <div class="editor-section">
+        <h2>LaTeX Editor</h2>
+        <textarea id="editor" placeholder="Write your LaTeX code here..."></textarea>
+      </div>
+
+      <div class="output-section">
+        <h2>Output</h2>
+        <div id="output" class="output-box">
+          <p class="info">Compile your LaTeX code to see results here.</p>
+        </div>
+      </div>
+    </div>
+
+    <div id="aiModal" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <h2>Generate LaTeX with AI</h2>
+        <p>Describe what you want to create:</p>
+        <textarea id="aiPrompt" placeholder="Example: Create a research paper with sections for introduction, methodology, and conclusion"></textarea>
+        <button id="generateBtn" class="btn btn-primary">Generate</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="renderer.js"></script>
+</body>
+</html>
