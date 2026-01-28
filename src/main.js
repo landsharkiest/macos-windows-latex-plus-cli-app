@@ -142,5 +142,9 @@ ipcMain.handle('generate-latex', async (event, prompt) => {
 // Check AI availability
 ipcMain.handle('check-ai-availability', async () => {
   const generator = new AIGenerator();
-  return generator.isAvailable();
+  return {
+    available: generator.isAvailable(),
+    provider: generator.getProvider(),
+    model: generator.getProvider() === 'openai' ? generator.openaiModel : generator.ollamaModel
+  };
 });

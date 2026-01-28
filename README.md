@@ -5,9 +5,11 @@ An open-source macOS/Windows application for LaTeX with integrated AI capabiliti
 ## Features
 
 - 🖥️ **Cross-Platform**: Works on macOS and Windows
-- 📝 **GUI Editor**: Electron-based graphical interface with syntax highlighting
+- 📝 **GUI Editor**: Electron-based graphical interface
 - ⚡ **CLI Tool**: Command-line interface for automated workflows
-- 🤖 **AI Integration**: Generate LaTeX code from text prompts (OpenAI)
+- 🤖 **AI Integration**: Generate LaTeX code from text prompts
+  - **Cloud**: OpenAI GPT-4 for high-quality generation
+  - **Local**: Ollama support for privacy and offline usage
 - 📄 **PDF Compilation**: Compile LaTeX documents to PDF
 - 🎨 **Modern UI**: Clean, user-friendly interface
 
@@ -21,7 +23,11 @@ An open-source macOS/Windows application for LaTeX with integrated AI capabiliti
   - **Windows**: [MiKTeX](https://miktex.org/) or [TeX Live](https://www.tug.org/texlive/)
 
 ### Optional
-- **OpenAI API Key**: For AI-powered LaTeX generation (set `OPENAI_API_KEY` environment variable)
+- **AI Integration** (choose one):
+  - **OpenAI API Key**: For cloud-based AI generation
+  - **Ollama**: For local, privacy-focused AI generation
+    - Install from [ollama.ai](https://ollama.ai)
+    - Recommended models: `codellama`, `llama2`, `mistral`
 
 ## Installation
 
@@ -36,16 +42,45 @@ An open-source macOS/Windows application for LaTeX with integrated AI capabiliti
    npm install
    ```
 
-3. **Set up OpenAI API Key** (optional):
+3. **Set up AI Integration** (optional - choose one):
+
+   **Option A: OpenAI (Cloud)**
    ```bash
    # macOS/Linux
+   export AI_PROVIDER=openai
    export OPENAI_API_KEY="your-api-key-here"
    
    # Windows (Command Prompt)
+   set AI_PROVIDER=openai
    set OPENAI_API_KEY=your-api-key-here
    
    # Windows (PowerShell)
+   $env:AI_PROVIDER="openai"
    $env:OPENAI_API_KEY="your-api-key-here"
+   ```
+
+   **Option B: Ollama (Local)**
+   ```bash
+   # 1. Install Ollama from https://ollama.ai
+   
+   # 2. Pull a model (codellama recommended for LaTeX)
+   ollama pull codellama
+   
+   # 3. Start Ollama service (if not already running)
+   ollama serve
+   
+   # 4. Configure environment
+   # macOS/Linux
+   export AI_PROVIDER=ollama
+   export OLLAMA_MODEL=codellama
+   
+   # Windows (Command Prompt)
+   set AI_PROVIDER=ollama
+   set OLLAMA_MODEL=codellama
+   
+   # Windows (PowerShell)
+   $env:AI_PROVIDER="ollama"
+   $env:OLLAMA_MODEL="codellama"
    ```
 
 ## Usage
@@ -109,15 +144,24 @@ node cli/latex-cli.js generate "<prompt>" [options]
 
 **Options**:
 - `-o, --output <file>`: Output file path (default: `./generated.tex`)
+- `-p, --provider <name>`: AI provider (`openai` or `ollama`)
+- `-m, --model <name>`: Model name to use
 - `--compile`: Automatically compile the generated LaTeX
 
 **Examples**:
 ```bash
-# Generate LaTeX
-node cli/latex-cli.js generate "Create a research paper with abstract and introduction"
+# Generate with OpenAI
+node cli/latex-cli.js generate "Create a research paper with abstract and introduction" -p openai
+
+# Generate with Ollama (local)
+node cli/latex-cli.js generate "Create a resume template" -p ollama -m codellama
 
 # Generate and compile
-node cli/latex-cli.js generate "Create a resume template" --compile -o resume.tex
+node cli/latex-cli.js generate "Create a math worksheet" --compile -o worksheet.tex
+
+# Use environment variable for provider
+export AI_PROVIDER=ollama
+node cli/latex-cli.js generate "Create a presentation"
 ```
 
 ## Project Structure
@@ -156,11 +200,23 @@ Edit `config/default.json` to customize settings:
   },
   "ai": {
     "provider": "openai",
-    "model": "gpt-4",
-    "enabled": false
+    "enabled": true,
+    "ollama": {
+      "baseUrl": "http://localhost:11434",
+      "model": "llama2"
+    },
+    "openai": {
+      "model": "gpt-4"
+    }
   }
 }
 ```
+
+**AI Provider Configuration**:
+- Set `provider` to `"openai"` or `"ollama"`
+- For Ollama: Customize `baseUrl` if running on a different host/port
+- For Ollama: Change `model` to any installed model (`codellama`, `mistral`, etc.)
+- For OpenAI: Adjust `model` for different GPT versions
 
 ## Building Executables
 
@@ -200,7 +256,32 @@ The application includes comprehensive error handling:
 ### AI features not working
 **Error**: `AI integration not available`
 
-**Solution**: Set the `OPENAI_API_KEY` environment variable with your API key.
+**Solution**: Configure an AI provider:
+
+**For OpenAI**:
+```bash
+export AI_PROVIDER=openai
+export OPENAI_API_KEY="your-api-key"
+```
+
+**For Ollama (Local)**:
+1. Install Ollama: https://ollama.ai
+2. Pull a model: `ollama pull codellama`
+3. Start Ollama: `ollama serve`
+4. Set environment:
+   ```bash
+   export AI_PROVIDER=ollama
+   export OLLAMA_MODEL=codellama
+   ```
+
+### Ollama connection failed
+**Error**: `Cannot connect to Ollama at http://localhost:11434`
+
+**Solution**:
+1. Make sure Ollama is installed and running: `ollama serve`
+2. Check if the service is accessible: `curl http://localhost:11434/api/tags`
+3. Verify the model is installed: `ollama list`
+4. If using a custom port, set `OLLAMA_BASE_URL` environment variable
 
 ### Permission errors on CLI
 **Error**: `Permission denied`

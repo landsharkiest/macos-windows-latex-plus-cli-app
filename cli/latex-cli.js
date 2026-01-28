@@ -48,19 +48,46 @@ program
   .command('generate <prompt>')
   .description('Generate LaTeX code from a text prompt using AI')
   .option('-o, --output <file>', 'Output file path', './generated.tex')
+  .option('-p, --provider <name>', 'AI provider (openai, ollama)', process.env.AI_PROVIDER)
+  .option('-m, --model <name>', 'Model name to use')
   .option('--compile', 'Compile the generated LaTeX to PDF')
   .action(async (prompt, options) => {
     try {
-      const generator = new AIGenerator();
+      const generatorOptions = {};
+      
+      if (options.provider) {
+        generatorOptions.provider = options.provider;
+      }
+      
+      if (options.model) {
+        if (options.provider === 'ollama' || (!options.provider && process.env.AI_PROVIDER === 'ollama')) {
+          generatorOptions.ollamaModel = options.model;
+        } else {
+          generatorOptions.model = options.model;
+        }
+      }
+      
+      const generator = new AIGenerator(generatorOptions);
 
       if (!generator.isAvailable()) {
         console.error('✗ AI integration not available.');
-        console.error('  Set OPENAI_API_KEY environment variable to enable AI features.');
-        console.error('  Example: export OPENAI_API_KEY="your-api-key"');
+        console.error('');
+        console.error('Configure one of the following providers:');
+        console.error('');
+        console.error('1. OpenAI (cloud):');
+        console.error('   export AI_PROVIDER=openai');
+        console.error('   export OPENAI_API_KEY="your-api-key"');
+        console.error('');
+        console.error('2. Ollama (local):');
+        console.error('   Install: https://ollama.ai');
+        console.error('   export AI_PROVIDER=ollama');
+        console.error('   export OLLAMA_MODEL=llama2  # or codellama, mistral, etc.');
+        console.error('   Then run: ollama serve');
         process.exit(1);
       }
 
-      console.log('Generating LaTeX from prompt:', prompt);
+      console.log(`Generating LaTeX with ${generator.getProvider()}...`);
+      console.log('Prompt:', prompt);
       const outputPath = await generator.generateToFile(prompt, options.output);
       console.log('✓ Generated LaTeX code saved to:', outputPath);
 

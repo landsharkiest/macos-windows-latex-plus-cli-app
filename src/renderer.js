@@ -9,18 +9,24 @@ const openBtn = document.getElementById('openBtn');
 const saveBtn = document.getElementById('saveBtn');
 const compileBtn = document.getElementById('compileBtn');
 const aiBtn = document.getElementById('aiBtn');
+const aiStatus = document.getElementById('aiStatus');
 const aiModal = document.getElementById('aiModal');
 const aiPrompt = document.getElementById('aiPrompt');
 const generateBtn = document.getElementById('generateBtn');
 const closeModal = document.querySelector('.close');
+const providerInfo = document.getElementById('providerInfo');
 
 // Check AI availability on load
-ipcRenderer.invoke('check-ai-availability').then((available) => {
-  if (available) {
+ipcRenderer.invoke('check-ai-availability').then((result) => {
+  if (result.available) {
     aiBtn.disabled = false;
-    aiBtn.title = 'Generate LaTeX with AI';
+    aiBtn.title = `Generate LaTeX with AI (${result.provider})`;
+    aiStatus.textContent = `AI: ${result.provider}`;
+    aiStatus.className = 'ai-status ai-enabled';
   } else {
-    aiBtn.title = 'AI not available - Set OPENAI_API_KEY';
+    aiBtn.title = 'AI not available - Configure AI provider';
+    aiStatus.textContent = 'AI: Not configured';
+    aiStatus.className = 'ai-status ai-disabled';
   }
 });
 
@@ -68,7 +74,16 @@ compileBtn.addEventListener('click', async () => {
 });
 
 // AI Generate button
-aiBtn.addEventListener('click', () => {
+aiBtn.addEventListener('click', async () => {
+  const result = await ipcRenderer.invoke('check-ai-availability');
+  if (result.available) {
+    let providerText = `<p class="provider-label">Using: <strong>${result.provider}</strong>`;
+    if (result.model) {
+      providerText += ` (${result.model})`;
+    }
+    providerText += '</p>';
+    providerInfo.innerHTML = providerText;
+  }
   aiModal.style.display = 'flex';
   aiPrompt.focus();
 });

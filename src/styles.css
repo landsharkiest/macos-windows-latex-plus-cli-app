@@ -39,6 +39,25 @@ header p {
   padding: 15px 20px;
   background: white;
   border-bottom: 1px solid #ddd;
+  align-items: center;
+}
+
+.ai-status {
+  margin-left: auto;
+  padding: 8px 15px;
+  border-radius: 5px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.ai-status.ai-enabled {
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.ai-status.ai-disabled {
+  background: #ffebee;
+  color: #c62828;
 }
 
 .btn {
@@ -215,4 +234,17 @@ header p {
 #aiPrompt:focus {
   outline: none;
   border-color: #667eea;
+}
+
+.provider-info {
+  margin-bottom: 15px;
+  padding: 10px;
+  background: #f0f0f0;
+  border-radius: 5px;
+}
+
+.provider-label {
+  margin: 0;
+  font-size: 14px;
+  color: #555;
 }
