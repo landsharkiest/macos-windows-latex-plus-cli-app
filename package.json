@@ -1,0 +1,56 @@
+{
+  "name": "macos-windows-latex-plus-cli-app",
+  "version": "1.0.0",
+  "description": "An open-source MacOS/Windows application for LaTeX for students that has integrated AI capabilities",
+  "main": "src/main.js",
+  "bin": {
+    "latex-cli": "./cli/latex-cli.js"
+  },
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder",
+    "build:mac": "electron-builder --mac",
+    "build:win": "electron-builder --win",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "latex",
+    "pdf",
+    "electron",
+    "cli",
+    "ai",
+    "cross-platform"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.6.0",
+    "commander": "^11.0.0",
+    "openai": "^4.20.0"
+  },
+  "devDependencies": {
+    "electron": "^27.0.0",
+    "electron-builder": "^24.6.0"
+  },
+  "build": {
+    "appId": "com.latex.app",
+    "productName": "LaTeX Plus",
+    "directories": {
+      "output": "dist"
+    },
+    "mac": {
+      "category": "public.app-category.productivity",
+      "target": ["dmg"]
+    },
+    "win": {
+      "target": ["nsis"]
+    },
+    "files": [
+      "src/**/*",
+      "cli/**/*",
+      "config/**/*",
+      "node_modules/**/*",
+      "package.json"
+    ]
+  }
+}
