@@ -4,14 +4,14 @@ An open-source macOS/Windows application for LaTeX with integrated AI capabiliti
 
 ## Features
 
-- 🖥️ **Cross-Platform**: Works on macOS and Windows
-- 📝 **GUI Editor**: Electron-based graphical interface
-- ⚡ **CLI Tool**: Command-line interface for automated workflows
-- 🤖 **AI Integration**: Generate LaTeX code from text prompts
+- **Cross-Platform**: Works on macOS and Windows
+- **GUI Editor**: Electron-based graphical interface
+- **CLI Tool**: Command-line interface for automated workflows
+- **AI Integration**: Generate LaTeX code from text prompts
   - **Cloud**: OpenAI GPT-4 for high-quality generation
   - **Local**: Ollama support for privacy and offline usage
-- 📄 **PDF Compilation**: Compile LaTeX documents to PDF
-- 🎨 **Modern UI**: Clean, user-friendly interface
+- **PDF Compilation**: Compile LaTeX documents to PDF
+- **Modern UI**: Clean, user-friendly interface
 
 ## Prerequisites
 

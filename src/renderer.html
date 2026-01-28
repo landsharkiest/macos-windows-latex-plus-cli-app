@@ -3,46 +3,150 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>LaTeX Plus</title>
+  <title>LaTeX Plus - AI-Powered LaTeX Editor</title>
+  <link rel="icon" type="image/svg+xml" href="../assets/icons/favicon.svg">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <div class="container">
     <header>
-      <h1>LaTeX Plus</h1>
-      <p>Cross-platform LaTeX editor with AI integration</p>
+      <div class="header-content">
+        <div class="logo-title">
+          <svg class="header-logo" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+            <rect width="32" height="32" rx="6" fill="white" opacity="0.2"/>
+            <g transform="translate(16, 16)">
+              <rect x="-1.5" y="-8" width="3" height="12" fill="white"/>
+              <rect x="-5" y="-8" width="10" height="2.5" fill="white" rx="1"/>
+              <circle cx="4" cy="-1" r="2" fill="#ffd700"/>
+              <g transform="translate(7, -7) scale(0.6)">
+                <rect x="-2" y="-2" width="4" height="1" fill="#ffd700" transform="rotate(45)"/>
+                <rect x="-2" y="-2" width="4" height="1" fill="#ffd700" transform="rotate(-45)"/>
+              </g>
+              <path d="M -0.5,5 L -0.5,9 L 0,10 L 0.5,9 L 0.5,5 Z" fill="white"/>
+              <path d="M -0.5,9 L 0,10 L 0.5,9 Z" fill="#ffd700"/>
+            </g>
+          </svg>
+          <div>
+            <h1>LaTeX Plus</h1>
+            <p>AI-Powered Cross-Platform LaTeX Editor</p>
+          </div>
+        </div>
+        <div class="header-info">
+          <span id="latexStatus" class="status-badge">LaTeX: Checking...</span>
+          <span id="aiStatusBadge" class="status-badge">AI: Checking...</span>
+        </div>
+      </div>
     </header>
 
     <div class="toolbar">
-      <button id="openBtn" class="btn">Open File</button>
-      <button id="saveBtn" class="btn">Save File</button>
-      <button id="compileBtn" class="btn btn-primary">Compile to PDF</button>
-      <button id="aiBtn" class="btn btn-ai" disabled>AI Generate</button>
-      <span id="aiStatus" class="ai-status"></span>
+      <div class="toolbar-group">
+        <button id="openBtn" class="btn" title="Open LaTeX file (Ctrl/Cmd+O)">
+          Open
+        </button>
+        <button id="saveBtn" class="btn" title="Save file (Ctrl/Cmd+S)">
+          Save
+        </button>
+      </div>
+      <div class="toolbar-group">
+        <button id="compileBtn" class="btn btn-primary" title="Compile to PDF (Ctrl/Cmd+B)">
+          Compile to PDF
+        </button>
+        <button id="aiBtn" class="btn btn-ai" disabled title="Generate LaTeX with AI">
+          AI Generate
+        </button>
+      </div>
+      <div class="toolbar-group">
+        <button id="settingsBtn" class="btn" title="Settings">
+          Settings
+        </button>
+      </div>
     </div>
 
     <div class="main-content">
       <div class="editor-section">
-        <h2>LaTeX Editor</h2>
-        <textarea id="editor" placeholder="Write your LaTeX code here..."></textarea>
+        <div class="section-header">
+          <h2>LaTeX Editor</h2>
+          <span id="fileInfo" class="file-info">Unsaved Document</span>
+        </div>
+        <textarea id="editor" placeholder="Write your LaTeX code here...
+
+Example:
+\documentclass{article}
+\usepackage{amsmath}
+\title{My Document}
+\author{Your Name}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section{Introduction}
+Your content here...
+
+\end{document}"></textarea>
       </div>
 
       <div class="output-section">
-        <h2>Output</h2>
+        <div class="section-header">
+          <h2>Output</h2>
+          <button id="clearOutput" class="btn-clear" title="Clear output">Clear</button>
+        </div>
         <div id="output" class="output-box">
-          <p class="info">Compile your LaTeX code to see results here.</p>
+          <p class="info">
+            <strong>Welcome to LaTeX Plus!</strong><br><br>
+            - Write or open a LaTeX file<br>
+            - Click "Compile to PDF" to generate your document<br>
+            - Use AI to generate LaTeX from natural language<br>
+            - Press Ctrl/Cmd+S to save, Ctrl/Cmd+B to compile
+          </p>
         </div>
       </div>
     </div>
 
+    <!-- AI Modal -->
     <div id="aiModal" class="modal">
       <div class="modal-content">
         <span class="close">&times;</span>
         <h2>Generate LaTeX with AI</h2>
         <div class="provider-info" id="providerInfo"></div>
         <p>Describe what you want to create:</p>
-        <textarea id="aiPrompt" placeholder="Example: Create a research paper with sections for introduction, methodology, and conclusion"></textarea>
-        <button id="generateBtn" class="btn btn-primary">Generate</button>
+        <textarea id="aiPrompt" placeholder="Example: Create a research paper template with sections for abstract, introduction, methodology, results, and conclusion. Include a bibliography section."></textarea>
+        <div class="modal-actions">
+          <button id="cancelAiBtn" class="btn">Cancel</button>
+          <button id="generateBtn" class="btn btn-primary">Generate</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="modal">
+      <div class="modal-content">
+        <span class="close-settings">&times;</span>
+        <h2>Settings</h2>
+        <div class="settings-content">
+          <div class="setting-item">
+            <h3>LaTeX Distribution</h3>
+            <p id="latexPath" class="setting-value">Detecting...</p>
+          </div>
+          <div class="setting-item">
+            <h3>AI Provider</h3>
+            <p id="aiProvider" class="setting-value">Not configured</p>
+          </div>
+          <div class="setting-item">
+            <h3>Version</h3>
+            <p class="setting-value">1.0.0</p>
+          </div>
+          <div class="setting-item">
+            <h3>About</h3>
+            <p class="setting-value">
+              LaTeX Plus is an open-source cross-platform LaTeX editor with AI capabilities.<br>
+              <a href="#" id="githubLink">View on GitHub</a>
+            </p>
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button id="closeSettingsBtn" class="btn btn-primary">Close</button>
+        </div>
       </div>
     </div>
   </div>

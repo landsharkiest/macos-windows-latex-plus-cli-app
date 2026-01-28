@@ -1,0 +1,31 @@
+<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="favGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Background -->
+  <rect width="32" height="32" rx="6" fill="url(#favGradient)"/>
+  
+  <!-- Simplified TeX -->
+  <g transform="translate(16, 16)">
+    <!-- T -->
+    <rect x="-1.5" y="-8" width="3" height="12" fill="white"/>
+    <rect x="-5" y="-8" width="10" height="2.5" fill="white" rx="1"/>
+    
+    <!-- e subscript -->
+    <circle cx="4" cy="-1" r="2" fill="#ffd700"/>
+    
+    <!-- X superscript -->
+    <g transform="translate(7, -7) scale(0.6)">
+      <rect x="-2" y="-2" width="4" height="1" fill="#ffd700" transform="rotate(45)"/>
+      <rect x="-2" y="-2" width="4" height="1" fill="#ffd700" transform="rotate(-45)"/>
+    </g>
+    
+    <!-- Pen -->
+    <path d="M -0.5,5 L -0.5,9 L 0,10 L 0.5,9 L 0.5,5 Z" fill="white"/>
+    <path d="M -0.5,9 L 0,10 L 0.5,9 Z" fill="#ffd700"/>
+  </g>
+</svg>

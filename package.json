@@ -1,16 +1,20 @@
 {
-  "name": "macos-windows-latex-plus-cli-app",
+  "name": "latex-plus",
   "version": "1.0.0",
-  "description": "An open-source MacOS/Windows application for LaTeX for students that has integrated AI capabilities",
+  "description": "Professional cross-platform LaTeX editor with AI capabilities for macOS and Windows",
   "main": "src/main.js",
   "bin": {
     "latex-cli": "./cli/latex-cli.js"
   },
   "scripts": {
     "start": "electron .",
+    "dev": "NODE_ENV=development electron .",
     "build": "electron-builder",
     "build:mac": "electron-builder --mac",
     "build:win": "electron-builder --win",
+    "build:all": "electron-builder -mw",
+    "generate-icons": "node assets/generate-icons-sharp.js",
+    "postinstall": "electron-builder install-app-deps",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -19,10 +23,19 @@
     "electron",
     "cli",
     "ai",
-    "cross-platform"
+    "cross-platform",
+    "editor",
+    "document"
   ],
-  "author": "",
+  "author": {
+    "name": "LaTeX Plus Team",
+    "email": "support@latexplus.app"
+  },
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/landsharkiest/macos-windows-latex-plus-cli-app.git"
+  },
   "dependencies": {
     "axios": "^1.6.0",
     "commander": "^11.0.0",
@@ -30,27 +43,123 @@
   },
   "devDependencies": {
     "electron": "^27.0.0",
-    "electron-builder": "^24.6.0"
+    "electron-builder": "^24.6.0",
+    "sharp": "^0.33.0",
+    "png-to-ico": "^2.1.8",
+    "png2icons": "^2.0.1"
   },
   "build": {
-    "appId": "com.latex.app",
+    "appId": "com.latexplus.app",
     "productName": "LaTeX Plus",
+    "copyright": "Copyright © 2026 LaTeX Plus",
     "directories": {
-      "output": "dist"
-    },
-    "mac": {
-      "category": "public.app-category.productivity",
-      "target": ["dmg"]
-    },
-    "win": {
-      "target": ["nsis"]
+      "output": "dist",
+      "buildResources": "assets"
     },
     "files": [
       "src/**/*",
       "cli/**/*",
       "config/**/*",
+      "assets/**/*",
+      "!assets/generate-*.js",
+      "!assets/**/*.md",
       "node_modules/**/*",
       "package.json"
-    ]
+    ],
+    "mac": {
+      "category": "public.app-category.productivity",
+      "icon": "assets/icons/icon.icns",
+      "target": [
+        {
+          "target": "dmg",
+          "arch": ["x64", "arm64"]
+        },
+        {
+          "target": "pkg",
+          "arch": ["x64", "arm64"]
+        }
+      ],
+      "hardenedRuntime": true,
+      "gatekeeperAssess": false,
+      "entitlements": "assets/entitlements.mac.plist",
+      "entitlementsInherit": "assets/entitlements.mac.plist",
+      "type": "distribution"
+    },
+    "dmg": {
+      "title": "LaTeX Plus ${version}",
+      "icon": "assets/icons/icon.icns",
+      "background": "assets/dmg-background.png",
+      "contents": [
+        {
+          "x": 130,
+          "y": 220
+        },
+        {
+          "x": 410,
+          "y": 220,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ],
+      "window": {
+        "width": 540,
+        "height": 380
+      }
+    },
+    "pkg": {
+      "license": "LICENSE",
+      "allowAnywhere": false,
+      "allowCurrentUserHome": false,
+      "allowRootDirectory": false
+    },
+    "win": {
+      "icon": "assets/icons/icon.ico",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": ["x64", "ia32"]
+        },
+        {
+          "target": "msi",
+          "arch": ["x64"]
+        },
+        {
+          "target": "portable",
+          "arch": ["x64"]
+        }
+      ],
+      "publisherName": "LaTeX Plus",
+      "verifyUpdateCodeSignature": false,
+      "requestedExecutionLevel": "asInvoker"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "LaTeX Plus",
+      "installerIcon": "assets/icons/icon.ico",
+      "uninstallerIcon": "assets/icons/icon.ico",
+      "installerHeaderIcon": "assets/icons/icon.ico",
+      "license": "LICENSE",
+      "perMachine": false,
+      "deleteAppDataOnUninstall": false,
+      "runAfterFinish": true,
+      "menuCategory": true
+    },
+    "msi": {
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "perMachine": false,
+      "runAfterFinish": true,
+      "shortcutName": "LaTeX Plus"
+    },
+    "linux": {
+      "icon": "assets/icons/icon-512.png",
+      "target": ["AppImage", "deb", "rpm"],
+      "category": "Office",
+      "synopsis": "LaTeX editor with AI capabilities",
+      "description": "Professional cross-platform LaTeX editor with AI-powered code generation"
+    }
   }
 }
